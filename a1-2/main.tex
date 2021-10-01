@@ -1,0 +1,22 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{1-2}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+We shall approach this problem using a D\&C routine. First, we want to choose the bottom most point from the set $S$. Let's call this point $r$. We can then draw a horizontal line through $r$. We can see that all points in $S$ are above this line. Now, we will calculate the angle each point makes relative to the horizontal line with $r$ set as the origin of the coordinate system. Since we know the coordinates of each point, this will be a simple trigonometric calculation. Ie Cartesian to Polar conversion which can be done in $O(1)$ time for each point or $O(n)$ total for every point. Having done so, we can sort every point in increasing angle size in a total of $O(n \log n)$ time.\\
+
+Given that the root has $k$ children and the fact that we know the size of each subtree from the tree $G$, we can split the points by $k$ ordered subsets of size corresponding to the size of each subtree. The points in each subset will be bounded by two rays with origin at $r$, the first being one that goes through the first element of the subset, and the other being one that goes through the first element of the next subset.\\
+
+For each subset, the line connecting $r$ to the smallest element will correspond to a branch from tree $G$'s root. Now for each subset, we do a similar routine as we did in the root case, replacing $r$ with the corresponding child of $r$ and the set $S$ with the subset this child is a part of. Since we are choosing the rightmost point (the point with least polar angle in the subset), we keep the invariant that all other points in the subset are on one side (the left side) of the ray that crosses the corresponding child of the root. We will recalculate all angles, now relative to the corresponding child of the root and sort the elements of the subset. We should keep in mind that we will be rotating the coordinate system for each origin point such that we always have all the points with angles in range $0 \leq \theta \leq 180$.\\
+
+Since for each iteration, we see that there are no existing lines within the domain of the points in the subset and the fact that the domain is a convex region (a line connecting any two points within the region is inside the domain), we know that we will not have any lines crossing each other.\\
+
+In terms of runtime, first let's consider the height of the tree $G$. Let's say that a node has $n$ descendants and has $k$ subtrees. The largest subtree $n_{max}$ must be smaller than $n - \Sigma_{i \neq max} C_i n_i/k \leq n - C (n-1)/k$ for some constant $C$. Here we see that even the largest subtree shrinks by an order of $1/k$. Since this rule happens on every level and we know that $k \geq 2$ we know that the tree will have a height of $O(\log n)$. Now on each level, we sort $k$ different subsets of varying size which add up to $n$. The time it takes to sort every subset is $\Sigma_{i=1}^{k} n_i \log n_i \leq n \log n_{max} \leq n \log n$. Therefore each level never does more than $O(n \log n)$ amount of work. Combining these two statements we get a total runtime of $O(n \log^2 n)$.
+
+\end{document}
+

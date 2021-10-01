@@ -1,0 +1,35 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{5-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+\subsection{Question 1}
+
+For a given $n \times n$ matrix $M$, we set up a corresponding set of vertices $V_1$ and $V_2$ numbered from 1 to $n$ for each set. Then for every entry $m_{ij}$ of the matrix $M$, we add an edge from $i \in V_1$ to $j \in V_2$ if $m_{ij} \neq 0$. The reduction will take $O(n^2)$ time which is linear time for $n^2$.\\
+
+We will now prove the correctness of this reduction. Given a perfect matching in the graph reduced from the input matrix, there is a matching from $i \in V_1$ to $j \in V_2$. Setting up a function $\sigma (i) = j$, we can see that if the perfect matching accepts an input, the matrix will have a non-zero product as described in the problem since an edge only exists if the term at $(i, j)$ is non-zero.\\
+
+Using the same statement the other way around, namely given a permutation $\sigma (i)$, we can set a corresponding edge $j = \sigma (i)$ for each node $i \in V_1$. Since every $m_{ij}$ in this case is non-zero, the edge $(i,j)$ would be in the bipartite graph. Hence, a perfect matching exists.
+
+\subsection{Question 2}
+
+We can easily see that if $k=|V|/2$, we are done.\\
+
+If $k>|V|/2$, we will add dummy vertices with no edges until $k=|V'|/2$ where $V'$ is the set of original vertices and additional dummy vertices. The size of the clique in the original graph as well as the augmented graph will be the same since we did not add any edges.\\
+
+If $k<|V|/2$,  we will add dummy vertices connected to every other vertex. Doing so will increase the size of every clique in the original graph by $n$, the number of additional vertices. We will hence add vertices until $k+n=|V'|/2$. If we confirm that this new augmented graph has a clique of size at least $|V'|/2$, we see that removing the dummy vertices shows that there is a clique of size at least $k$. Similarly, if there is a clique of size at least $k+n$ in the augmented graph we know that no more than $n$ of them are dummy vertices. We can see that $n = |V| - 2k$.\\
+
+In either case, we will be adding $O(|V|)$ vertices and $O(|V|^2)$ edges. By the adjacency matrix look-up, we stay in linear time in the input size.
+
+\section{Part b}
+
+By LP duality, we know that the optimal value for $\min b^Ty$ while under the constraint $Ay = c$ is equal to the optimal value for the primal LP. Then we can set a new variable with constraints $z = b^Ty = a^Tx$ and apply the constrains $Ay = c$. Then, querying the Oracle would return the unique optimal value since we are guaranteed that the LP is feasible.
+
+\end{document}
+

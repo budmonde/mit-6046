@@ -1,0 +1,38 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{2-2}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+The main intuition of how we will approach this problem is to repeat a single comparison $O(\log n)$ times and choosing the more likely result for a comparison sort of runtime of $O(n \log n)$ runtime. We clearly see that the total runtime of this procedure would be $O(n \log^2 n)$.\\
+
+First we need to find the maximum probability we can allow for each comparison to be wrong such that the total sorting is successful with probability 0.99. To do so we union bound our sorting process. In our comparison sort, we make a total of $O(n \log n)$ comparisons. If at least one of the comparisons was wrong, the entire procedure would have been wrong. Then we see that we can upper bound the probability of failing a single comparison to be $0.01 / (C_1 n \log n)$ for some constant $C_1$.\\
+
+With that in mind, we can use the Chernoff bound to to show that if we have a probability of $1/3$ for getting a comparison wrong, getting $O(\log n)$ samples and choosing the majority result (whether $A$ is heavier than $B$ for a comparison between $A$ and $B$) would set an upper bound to getting the wrong value to be $\leq 0.01 / (C_1 n \log n)$.\\
+
+Let's define $Y_i$ to be a $1$ if the comparison was wrong and $0$ if it was correct. Then we want the probability that more than half the samples being wrong to be upper bounded by
+
+\begin{equation*}
+    Pr(\sum Y_i > (C_2 \log n) / 2) \leq exp(-b^2 E / 3).
+\end{equation*}
+From the definition of the Chernoff bound, we can find $E$ as well as $b$.
+\begin{eqnarray*}
+(b+1) E &=& (C_2 \log n) / 2\\
+E &=& (C_2 \log n) / 3\\
+b &=& 1/2
+\end{eqnarray*}
+Using this, we can see that the probability of getting a wrong comparison is upper bounded by
+\begin{eqnarray*}
+    Pr(\sum Y_i > (C_2 \log n) / 2) &\leq& exp(-1/4\ C_2 (\log n) /3)\\
+    &=&exp(-C \log n)\\
+    &=&n^{-C}.
+\end{eqnarray*}
+
+For $C>2$ we are fulfilling our requirement, therefore we are done.
+
+\end{document}
+

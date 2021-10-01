@@ -1,0 +1,69 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{1-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part 1}
+We can use Master theorem in this problem. The recursive formula reads as
+\begin{equation*}
+    T(n) = 8 T(n/3) + O(\sqrt{n} + \log n).
+\end{equation*}
+We can see that $n^{\log_3 8}$ is asymptotically larger than both $\sqrt{n}$ and $\log n$ so the overall runtime is
+\begin{equation*}
+    T(n) = O(n^{\log_3 8}).
+\end{equation*}
+
+\section{Part 2}
+The recursive formula for this problem is as follows.
+\begin{equation*}
+    T(n) = T(n - 1) + 2T(n - 2) + O(1).
+\end{equation*}
+We claim that this recursive equation has runtime of $T(n) = C\ 2^n$ where $C$ is some constant. We can prove this using induction. In the base case, $T(1) = C$. For some $k>1$, let's assume $T(k-1) = C\ 2^{k-1}$ and $T(k-2) = C\ 2^{k-2}$ are true. Then,
+\begin{eqnarray*}
+    T(k) &=& C 2^{k-1} + 2C 2^{k-2}C + C\\
+    T(k) &=& C 2^{k} + C\\
+    T(k) &+& O(2^{k}).
+\end{eqnarray*}
+As such, we have proven that the total runtime is
+\begin{equation*}
+    T(n) = O(2^n).
+\end{equation*}
+
+\section{Part 3}
+The recursive formula for this problem is as follows.
+\begin{equation*}
+    T(n) = T(n/2) + 2T(n/4) + O(n).
+\end{equation*}
+If we expand the recurrence tree and add up work done on each level for combining the solutions we get the following.
+\begin{equation*}
+    T(n) = O(n) + O(1^1 n) + O(1^2 n) + O(1^3 n) + ... + O(1^{\log n} n).
+\end{equation*}
+Solving this sum of geometric progression with scale factor equal to $1$, we see that the total runtime is
+\begin{equation*}
+    T(n) = O(n \log n).
+\end{equation*}
+
+\section{Part 4}
+The recursive formula for this problem is as follows.
+\begin{equation*}
+    T(n) = 6 T(\sqrt[3]{n}) + \log^2 n.
+\end{equation*}
+We can manipulate the variables of this problem using the substitution $n = 2^k$.
+\begin{equation*}
+    T(2^k) = 6 T(2^{k/3}) + k^2.
+\end{equation*}
+From here, we can make a substitution $S(k) = T(2^k)$. Then,
+\begin{equation*}
+    S(k) = 6 S(k/3) + k^2.
+\end{equation*}
+By Master Theorem, we have $S(k) = O(k^2)$. Using the fact that $k = \log n$ this gives us the solution,
+\begin{equation*}
+    T(n) = \log^2 n.
+\end{equation*}
+\end{document}
+

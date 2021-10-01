@@ -1,0 +1,64 @@
+\documentclass{6046}
+
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\author{Budmonde Duinkharjav}
+\problem{4-3}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+The second constraint does not affect our optimal solution at all since it is not involved in the objective function, so we can choose $x_3$ and $x_4$ however we wish to make the equation true. Let's plot the inequalities 1, 3, 4. In the objective function we also notice that $c_3$ does not affect in finding the optimal solution. Hence, we see that objectives 1 and 2 are equivalent. 
+
+\includegraphics[width=0.8\textwidth]{graph}
+
+\subsection{Objectives 1 \& 2}
+We see that we need to maximize the line corresponding to $x_2=-x_1$ which can be seen as a dashed line on the graph. If we maximize this graph by moving it up, we will reach the border at $x_1=148/53$ and $x_2=68/53$. Hence this is the optimal solution for these questions.
+\subsection{Objective 3}
+We see that this objective requires that we essentially find a $\min$ of $2 x_1 + 4 x_2$. Since our graph is not lower-bounded, there is no finite solution.
+
+\section{Part b}
+For all $i$, we make the following substitutions: $a_i = |c_i x_i|$ by adding an additional constraint $-a_i \leq c_i x_i \leq a_i$ so that we don't lose information about $c_i x_i$. Therefore, we can rewrite the problem statement as
+
+\begin{eqnarray*}
+    \min_a \sum_i a_i\ s.t.&&\\
+    Ax \leq b&&\\
+    -a_i \leq c_i x_i \leq a_i&&\\
+\end{eqnarray*}
+
+Transforming this into standard form, we get
+\begin{eqnarray*}
+    \max_a \sum_i -a_i\ s.t.&&\\
+    A(x'-x'') \leq b&&\\
+    c_i (x_i'-x_i'') \leq a_i&&\\
+    - c_i (x_i'-x_i'') \leq a_i&&\\
+    x_i' \geq 0&&\\
+    x_i'' \geq 0&&\\
+    a_i \geq 0&&\\
+\end{eqnarray*}
+
+
+\section{Part c}
+\subsection{Question 1}
+Following the shortest path LP described in CLRS, We define $d_v$ to be the length of the path to node $v$ from source $s$. By the triangle inequality, we get constraint equations:
+\begin{equation*}
+    d_v \leq d_u + 1 \ for \ every \ edge \ (u,v) \in E
+\end{equation*}
+
+We also set $d_s = 0$. Let's say we are trying to find the shortest path with the said constraints to some node $v$. We know a set of paths to vertices $u \in U$ such that there is an edge between $v$ and $u$. Then the shortest path to $v$ would be $\min_{u \in U} (d_u + 1)$. We are able to get this using our LP constraint equations if we put that we want to maximize $d_v$ within the constraints range. Hence, to find the shortest path to the sink node $t$, our objective function must be to maximize $d_t$. Since the base case for this method is 0 with each step being equal to 1, we have a ILP. For more details of this method, refer to CLRS section 29.2.
+
+\subsection{Question 2}
+We create an indicator variable $a_v$ representing each vertex to be either 1 or 0 depending on whether we choose to include the vertex in the cover or not. Then, our constraint becomes to have $a_v + a_u >= 1$ for each edge $(v,u)$ in the graph. Then, our objective function would be to minimize the sum of all indicator variables. Since the variables can only take on integer values of 1 or 0, we have an ILP satisfying the requirement.
+
+\section{Part d}
+To test where $C$ lies, we will introduce a supplementary constraint function $c^T x >= \alpha$. If the oracle outputs a feasible solution, we know that there are $>=1$ feasible solutions with the current set of constraint functions applied. If the oracle outputs a \emph{no}, we know that there are no feasible solutions in the given set of constraint functions. Then, our approach would be to increase the value of $\alpha$ exponentially, from 0, 1, 2, 4, ... until we get an output from the oracle to be a \emph{no}. Then starting from that we will essentially do a binary search on $\alpha$ betwwen $2^k$ and $2^{k+1}$ for $k$ such that the first \emph{no} response from the oracle was at $\alpha = 2^{k+1}$. For each step of the binary search we will follow the reasoning mentioned at the beginning of the solution: for feasible outputs raise $\alpha$ and vice versa. We will terminate when the difference between $\alpha$ values between two steps becomes equal to one since we know that $C$ is an integer. The runtime of this algorithm is $O(\log C)$ because we approach $C$ initially with $\log C$ steps and then do binary search on a range which is $O(C)$ taking $O(\log C)$ time. 
+
+\section{Part e}
+Let's say we have a constraint function $x<1$ with the objective function of maximizing $x$. In this case, we cannot actually find an optimal solution. Let's say for contradiction's sake that there exists a solution. Then, it must be the case that $\bar{x} < 1$. Then there exists an $\bar{x'} > 1 -  \epsilon/2$ where $\epsilon = 1 - \bar{x}$. But then, this new $\bar{x'}$ is the larger than $\bar{x}$ while keeping the constraint function valid. By contradiction we are done.
+
+
+\end{document}
+

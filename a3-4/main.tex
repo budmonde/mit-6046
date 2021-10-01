@@ -1,0 +1,23 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{3-4}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo, Danny Tang}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+Let's reverse the list $C$ for the sake of convenient notation. We claim that the optimal solution is to simply choose the $k$ items with largest stock  for each meal and we will return the maximum days of survival. To do so we need to keep the list sorted as we remove items from the list. We do so by doing the following. First, we keep a map of stock level and pointer of where items of the particular stock level are in the list. So essentially, we will have a unique key for every group of items with the same amount in stock each. Then, removing an item from a stock will decrease its key by one. Now, let's say we remove an item from the list such that it has the same stock as the item in the group that used to have a stock less by one. Then, we will move the pointer such that both of the items are now in the same group. In the case of some $j$ unique consecutive items being removed from a group of $i$ items, we will point the $j$ items to have a pointer less by one than the group it used to be in. If it happens that such a group did not exist, we simply create a new key for it. Doing such operations copy over at most $k$ stocks and since we're using linked lists, we are avoiding copying over redundantly. Keeping track of our list as such ensures that we keep track of which items have the same stock level at all times and we can hence use that to keep the entire list sorted. As each removal process as mentioned before only affects up to $k$ unique items, we know that per operation, we are doing $O(k)$ work. Then, since the maximum days we can survive is $n/k$ we will repeat the process that many times. Hence, the total runtime of this algorithm is $O(n)$.\\
+
+Now we simply need to prove that this greedy approach of choosing the $k$ largest unique items is indeed correct. Let's say the optimal solution differs from our greedy solution at some removal of a single item such that our greedy solution removes an item from the $j$th index while the optimal removes from the $i$th index. Since $c_j$ is one of the $k$ largest in the list and $i$th cannot be among them, we know that $c_i < c_j$ (the equaling case is not important since the switch would be completely irrelevant anyways). Let's consider the following cases.\\
+
+By the end of the algorithm the $c_j > 0$. Then, by using our greedy algorithm, we could have had one extra stock for $i$ which would increase the pool of unique items by 1 if $c_j > 1$ by the end of the algorithm. If $c_j = 1$, we get as good a solution.\\
+
+By the end of the algorithm the $c_j = 0$. This implies that there were $c_j$ removals where the $j$th item is the was used. By using our greedy algorithm, we are reducing this by one. However, we are at the same time, recovering the stock of $c_i$ by one. Since $c_i < c_j$ at the point of divergence from the greedy solution, even in the case that $c_i$ ended up becoming zero by the end, there will be turns when $c_j$ is used and $c_i$ is not. We can swap in our saved $i$th element to recover the removal we had potentially lost.\\
+
+As such we see that making a single change from the optimal to the greedy solution cannot make the solution worse. Repeating this for every divergence of the optimal solution from the greedy we will arrive at our greedy solution. Hence we are done.
+
+
+\end{document}
+

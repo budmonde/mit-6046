@@ -1,0 +1,35 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{2-5}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Cheuk-Wing Fan, Courtney Guo, Vyacheslav Kim}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+Since the algorithm is not randomized, it means there is some predetermined order the elements in the list will be read. If we enforce a runtime of $\Omega(n)$, we know that we won't be able to read every single element in the list. Then, we can always find a unsorted list for which the unsorted parts are only revealed at the latter half of the procedure. Hence, we are done.
+
+\section{Part b}
+We will construct a counter example of a not-almost-sorted-list to output almost sorted with high probability for this input. Let's say we have a sorted list of size $n$. Then we move the second half of the list in the middle of the first half. Then, when we run the algorithm, we only output not sorted no more than four times. Hence the probability we will find these outputs for randomly chosen $i$s is $4/n$, or more generally, $C/n$ for some constant $C$. Then the probability of not finding any of these indicies equals $(1-C/n)$. Repeating this $k$ times the probability of not finding any of the indicies is $(1-C/n)^k$. Since we want this probability to be less than 0.1, we require that $k = \Omega(n)$ for this upper bound to be possible. 
+
+\section{Part c}
+This procedure is binary search. Let's consider $x$ and $y$ and for every depth of recursion they were 'pivoting' on the same pivot point and at some recursion depth $i$, they diverge from having the same pivot point. Then, wlog, $x < T[i] < y$ is true. Hence we know that $x < y$. In this case, we know that $FOO(x)$ will return an index less than $i$ and $FOO(y)$ will return an index larger than $i$. Therefore we are done.
+
+\section{Part d}
+In the cases when the input is sorted, we will always return that it is almost-sorted, which is true. If we run it on an input which is almost-sorted, it will either output almost-sorted or not sorted, both of which are correct. The only case we need to worry about is for a not-almost-sorted list outputting almost-sorted. We need to bound the probability of this happening to be less than $0.1$.
+
+To prove this, let's first prove a lemma: If a list is not-almost-sorted, less than $3n/4$ indices match $i = FOO(T[i])$. To prove this statement we shall prove the contra-positive which is if more than $3n/4$ of the indices match, the list is almost-sorted.\\
+
+For the indices which match $i = FOO(T[i])$, let's order them in ascending order such that we have a sequence $i_1, i_2, ... i_{3n/4}$. By part c, we know that the values are also ordered, such that $T[i_1] < T[i_2] < ... < T[i_{3n/4}]$. Then if we remove the rest of the items, we will have a sorted list, so this list is almost-sorted.\\
+
+Having proven that if a list is not-almost-sorted, less than $3n/4$ indices match $i = FOO(T[i])$, we know that the probability for a not-almost sorted list to output almost-sorted after trying for $k$ is
+
+\begin{equation*}
+    Pr(almost-sorted | not-almost-sorted) = (fraction of good indices)^k < (\frac{3}{4})^k < 0.1.
+\end{equation*}
+From this equation we can see that $k$ can be $\Theta(1)$ for this to be true.
+
+\end{document}
+

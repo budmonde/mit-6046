@@ -1,0 +1,16 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{5-2}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+For any pair of Nash equilibrium strategies $(i,j)$, if we insert this strategy in a payoff table, we would expect the row $i$ and column $j$ to not have any strategies with a better payoff. Then if we had another pair of Nash equilibrium strategies which are either $(i,k)$ or $(k,j)$, we would be violating the Nash equilibrium strategy definition. WLOG, let's say there's a Nash equilibrium pair of strategies $(i,k)$. Then player B swapping to strategy $k$ should give B a strictly better payoff -- which would imply $(i,j)$ did not give a strictly better payoff to $B$, hence the contradiction.\\
+
+Then, we can see that if for each Nash equilibrium strategy $(i,j)$, we can make an entry in the payoff table to be $(1,1)$ and $(0,0)$ otherwise. Then, reading off each row and column and checking if there are any rows or columns with more than one entry which is not $(0,0)$. If so, we know that a payoff table cannot be created, otherwise we would have come up with a payoff table as described. This algorithm is polynomial in $n$ and $k$ since we create a table of size $n^2$ and scan through it $O(1)$ times.
+
+\end{document}
+

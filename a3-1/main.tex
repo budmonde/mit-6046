@@ -1,0 +1,30 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{3-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo, Brice Huang}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+To prove this, let's say there is an SMST for which there are more than two differences between it and the MST. We will show that by decreasing these differences down to one, we will have as valid a SMST if not better.\\
+
+Let's consider the case when for a given vertex, the SMST does not choose either of the edges which are in the MST for the said vertex. This means that each edge (given it has two -- it may have one if its a leaf vertex but in the context of this proof, its effectively the same). Say the first edge connects a subtree of the graph with the vertex in consideration and the subtree connected to the other edge in consideration. Then, by the theorem covered in class, the edge that the MST chose which connects said two sets of vertices, is the edge with the smallest weight. Then, if we switch this edge such that it is the same as the MST, we will get a lower smaller spanning tree while becoming a better SMST (in ad hoc way the previous solution would no longer have been a valid SMST).\\
+
+Repeating this operation for each vertex, we can basically have up to a single edge difference from the MST for each vertex. Then, we can improve the tree even further by looking at the alternative edge used in the MSTs for each of the differences, choose keep the one that keeps the least difference between the MST edge and the SMST edge, and change all other non-MST edge to the MST edge.\\
+
+In all the operations we did, we did not make the tree worse than the proposed SMST. Hence, we are done.
+
+\section{Part b}
+To find the SMST, we first find the MST using the algorithm covered in class in $O(m \log m)$. Then, we proceed to augment the MST by the following procedure.\\
+
+We will process each node in the MST by running DFS on it while keeping track of the maximum weight edge to reach any node from the root node. This is done by comparing the weight of the edge that travels to a node from its parent with the maximum weight edge of the parent and taking the larger value. Done recursively, this can provide us with the maximum weight edge for each node to the root in $O(n)$ time since we are doing simple comparisons for each node we process.\\
+
+We can repeat this DFS routine for each node in a total of $O(n^2)$ time to have access to the maximum edge weight between any two nodes when travelled through the MST in $O(1)$ time assuming we have a all the data stored in a direct access map.\\
+
+Then, for each edge not in the MST, we check the maximum edge weight in the MST between the two endpoints of the edge and subtract that value from the weight of the edge in consideration. This will be the amount the edge weight will be increasing by should the maximum weight edge in the MST be switched with the edge in consideration. Repeating this process for every edge not in the MST and finding the minimum such increase should lead us to the SMST. Since $m = O(n^2)$, we are doing a total of $O(n^2)$ work for the augmentation, leading to a total runtime of $O(m \log m + n^2)$.
+
+\end{document}
+

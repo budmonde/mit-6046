@@ -1,0 +1,46 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{2-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+Following the reasoning from the min-cut algorithm, we can say that for a set of edges $C$, $|C|$ is upper bounded by $\frac{r}{n} \sum_{v \in V} deg(v) = \frac{2r|E|}{n}$ such that these edges result in the graph $G$ being separated into $r$ or more connected components. Then, we see that if we contract some edge randomly from $E$, we have a probability
+
+\begin{eqnarray*}
+    Pr(e \notin C) &=& 1 - \frac{|C|}{|E|}\\
+    &\geq& 1 - \frac{(2r - 1)|E|}{n|E|}\\
+    &=& 1 - \frac{2r - 1}{n}\\
+    &=& \frac{n - (2r - 1)}{n}.
+\end{eqnarray*}
+
+Since we have a base case algorithm when $n = 2(r-1) +1 = 2r - 1$, we simply need to recursively keep contracting edges until we reach the base case. The probability of us contracting edges $e_i \notin C$ is
+
+\begin{eqnarray*}
+    Pr(success) &=& (\frac{n-(2r-1)}{n}) (\frac{n-1-(2r-1)}{n-1}) ... (\frac{1}{2r})\\
+    Pr(success) &=& \frac{(n-(2r - 1))!(2r-1)!}{n!}\\
+    Pr(success) &=& \choose {n}{2r-1}^{-1}\\
+    Pr(success) &\geq& \frac{(2r-1)!}{n^{2r-1}}
+\end{eqnarray*}
+
+If repeat the algorithm $c n^{2r-1} \ln n$ times, we get a probability of failure
+
+\begin{eqnarray*}
+    Pr(fail) &\leq& (1 - \frac{1}{n^{2r-1}})^{n^{2r-1} c \ln n}\\
+    &\leq& e^{-c \ln n}\\
+    &=& \frac{1}{n^c}.
+\end{eqnarray*}
+
+The total repetitions result to have the total runtime to be $O(n^{2r+1} \ln n)$.
+
+\section{Part b}
+
+Let's construct a graph such that we have node $i$ connected to the other $n-1$ nodes. All the other nodes have $\Omega(n)$ edges connected to two other nodes in the cluster of $n-1$ nodes. In this case, the min-cut is all the edges connected to $i$. Then, we see that for a randomly chosen vertex in $G$, we only have three legal verticies that can be chosen of which the edges are contractable. Its two connected verticies in the cluster of $n-1$ verticies and node $i$. For any contraction thus, the probability of contracting an edge in $C$, the set of edges in the min-cut, is a constant $1/3$.
+
+\end{document}
+

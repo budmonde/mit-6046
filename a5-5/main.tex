@@ -1,0 +1,65 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{5-5}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+We define the state variables $x_k$ denoting whether Amy eats free food on day $k$ or not. If it's 1, she did and 0 otherwise. We would want to maximize the sum of all $x_k$ while constrained by the equations:
+
+\begin{eqnarray*}
+    \sum_{k \in S_i} x_k &\leq& c_i\ for\ all\ i\\
+    \sum_{k \in S'_j} x_k &\geq& c'_j\ for\ all\ j\\
+    x_k &=& \{1, 0\}\ for\ all\ k \in [1,n]\\
+\end{eqnarray*}
+
+\section{Part b}
+
+Let's assume SAT is in conjunctive-normal form. We may write those equations as a system of equations containing only OR and NOT statements. For each NOT statement we add a new constraint equation with a new variable. With that we can rewrite a clause as the following:
+
+\begin{equation*}
+    x_1 \lor x_2 ... \neg y_1 \lor \neg y_2\ ...
+\end{equation*}
+
+as:
+
+\begin{eqnarray*}
+    x_1 + x_2 +\ ...\ + z_1 + z_2 +\ ...\ &\geq& 1\\
+    z_1 &=& 1 - y_1\\
+    z_2 &=& 1 - y_2
+\end{eqnarray*}
+
+Since there can't be more than negations than the input size, we would have up to linear amount of extra variables and constraint equations we would add to create the ILP. As such, we would have an ILP which corresponds to the ILP created in the first part.
+
+\section{Part c}
+
+\subsection{Question 1}
+
+We define $T_i$ to be the number of days Amy didn't eat free food in the first $i$ days. Since we set the constraint that constraints can happen only on consecutive days, we can see that the constraints from part a become:
+
+\begin{eqnarray*}
+    T_l - T_m &\leq& c_i\ where\ l < m\\
+    T_m - T_l &\leq& -c'_j\ where\ l < m\\
+    T_l - T_{l-1} &\leq& 1\\
+\end{eqnarray*}
+
+We also notice that $T_l$ is a non-decreasing function Since $T_l$ is additive as $l$ increases. Then we see that
+
+\begin{eqnarray*}
+    \max_k T_k &=& T_n\\
+    \min_k T_k &=& T_0 = 0\\
+\end{eqnarray*}
+
+Then, minimizing $\max_k T_k - \min_k T_k$ is basically the same as $\min T_n$ which implies that we want to maximize the number of days when Amy eats free food.
+
+\subsection{Question 2}
+
+By using the theorem on Bellman-Ford's ability to solve any system of difference constraints in $O(VE)$ time where $V$ are the number of variables and $E$ are the number of constraints, we see that the optimization we are trying to achieve matches the Bellman-Fords optimization. In this setup, we have a total of $n+1$ variables $T_k$ for all $k \in [0, n]$, and $n+m$ constraint equations: $m$ original ones and $n$ more added due to the limit of eating once per day. As such the total run-time of the entire algorithm is in $O(n(m+n))$.
+
+\end{document}
+

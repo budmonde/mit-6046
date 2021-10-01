@@ -1,0 +1,18 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{2-3}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Kelsey Wong}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+Let's create a hash for each individual depending on whether they are friends with individual in the network. The hash key will be an $n$ bit binary integer $\mod n$ with the $k$th digit of the integer being $0$ if the user is friends with the used with id $k$ and 0 if not. Assuming $i$ and $j$ are not friends with each other, their hash keys should be the same hence when we read through the hash table after hashing every user, we will be able to detect users with the same hash to be 'double' users. Since for each user, we need to see who they are friends with to create the hash, we will spend $n$ operations doing so. Hashing every user therefore should take $O(n^2)$ time and reading through the hash table should take $O(n)$ time as well. So total runtime is still $O(n^2)$.
+
+\section{Part b}
+To make this version work, we simply augment our plan by two separate hashes for one user. One in which the user is a friend with themselves, i.e. if the user is the $k$th user, the $k$th digit of the integer used to compute the hash is 1, and a another hash where they are not friends with themselves. When we read through our hash table once again, if users $i$ and $j$ were doubles but friends with each other, then we would find both users with the hash key where the user is a friend with themselves. This version only increases the amound of computation by a constant so the analysis from above much stays the same with a runtime of $O(n^2)$.
+
+\end{document}
+

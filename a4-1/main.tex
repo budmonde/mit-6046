@@ -1,0 +1,21 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{4-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Vyacheslav Kim}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+By the end of an iteration of adding flow to a $2D$-residual graph, we can see from the set-up that we will have no path in the $2D$-residual graph from $s$ to $t$. Hence we can make two disjoint subsets of vertices $A$ and $B$ such that $s \in A$ and $t \in B$. There will be no edge with residual capacity larger than $2D$ can exist in the cut that is created from this partition. The amount of edges that connect these two sets of vertices is upper-bound by $|E|$. Since the residual capacity is upper-bounded by $2D$, we see that the total residual capacity between $A$ and $B$ is upper-bound by $|E|D$. Following the hint, we see that the total flow from $s$ to $t$ is hence upper bound by $2|E|D$ by the beginning of the iteration of the $D$-residual graph.
+
+\section{Part b}
+We have bound the total flow of the $D$-residual graph by $2|E|D$. For every augmentation, we remove at least $D$ flow from the graph. Hence, we see that we can have no more than $2|E|$ augmentations per iteration.
+
+\section{Part c}
+We saw in the last part that for each iteration, we make $O(|E|)$ augmentations, each augmentation taking $O(|E|)$ time since we are essentially running a \emph{BFS} algorithm. This implies that per iteration, we do $O(|E|^2)$ work. Since we start with $D \leq c_{max}$ and decrease the size of $D$ geometrically, we will be doing a total of $O(\log c_{max})$ iterations. Hence, we have a total run-time of $O(|E|^2 \log c_{max})$. The reason this run-time is polynomial as opposed to being pseudo-polynomial is because the run-time has a linear dependency to the \emph{length} of $c_{max}$ as opposed to the value of $c_{max}$. 
+
+\end{document}
+

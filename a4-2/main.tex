@@ -1,0 +1,25 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{4-2}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Vyacheslav Kim, Courtney Guo}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+From the set-up given in the problem statement, we can immediately conclude that we need an even number of people attending the party with equal amount of VCs and businessmen with the seating arrangement such that businessmen and VCs alternate in their seatings. Having accounted for that, we set up a flow-graph as follows. The supernode source $s$ will connect to each VC with an edge of capacity of 2. Then, according to which businessmen each VC is compatible with according to $G$, we connect each VC with 2 businessmen with an edge of capacity of 1. Finally each businessman would be connected to a super-sink node $t$ with an edge of weight of 2. Our criteria for whether an ideal seating is possible or not will be determined by running a max-flow from $s$ to $t$ and checking whether the max-flow is equal to the number of total vertices or not. The max-flow algorithm will run in $O(|E||V|)$ time since our augmented graph has $O(|V|)$ extra edges and $O(1)$ extra vertices.\\
+
+The intuition behind the algorithm is that each VC should be able to sit next to 2 businessmen from the subset of businessmen they're interested in. Hence they are given a capacity 2 edge from the source. If each VC is able to get this requirement, they are in an ideal seating. Symmetrically, the businessmen also get to sit next to 2 VCs who are interested in them. Therefore, if the max-flow allows for every VC to be supporting a flow of 2, we would have the optimal solution.
+
+\section{Part b}
+Let's name the two matchings $M_1$ and $M_2$. We know by the problem statement that $M_1 \cap M_2 = \varnothing$. Let's create a graph $G' = M_1 \cup M_2$. This graph will have two edges connected to each vertex in the graph. Let's pick a vertex at random and follow an edge from it, remove the edge from $G'$ and continue on this process. Since each vertex has two edges connected, we will guarantee that if in this chain we reached a vertex we always are able to leave it unless we reach the vertex we started off from since we deleted one of the edges for the starting vertex already. As such, this chain will eventually have to terminate at the starting node since otherwise we would have a vertex with only one edge in $G'$ which would contradict our set-up. Every time we end a cycle, we may or may not be left with unprocessed vertices. If there are none, we are done. If not, we can pick another vertex at random and do the same process over and over and we would still guarantee to get cycles. Since the matchings were disjoint, we also guarantee that our cycles are disjoint.
+
+\section{Part c}
+By CLRS 26.3-5, we know that if $G$ is regular there is a matching in $G$ which is of cardinality $|L|$ where $L$ in our case is the set of vertices representing the VCs. Since we know that $|L| = |R| = |V|/2$ ($R$ is the set of vertices representing businessmen), we see that this matching is a perfect matching. We can find one perfect matching and remove the set of edges that are in this matching from $G$. The remaining graph is still regular. Hence we know that we can create another perfect matching. Now that we have these two perfect matchings, we can use part b to create disjoint cycles. Each cycle would represent a table and how they would sit around it each edge representing who would be neighbouring who. We know that there would be no cycles with only two vertices since in this case it would mean that there are two edges connected to the same -- a set-up which is not possible.\\
+
+The run-time of this algorithm is dependent on the two stages: (1) finding two perfect matchings (2) processing the resultant graph of the union of the disjoint matchings. By the Hopcroft–Karp algorithm, we see that this takes $O(\sqrt{|V|}|E|)$. The second stage only takes $O(|V|)$ since we are simply processing each vertex once. Hence the total run-time is $O(\sqrt{|V|}|E|)$
+
+\end{document}
+

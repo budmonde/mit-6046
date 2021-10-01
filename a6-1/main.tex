@@ -1,0 +1,36 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{6-1}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Danny Tang}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+Let's pick some node in the graph as a starting point. Then, we are able to traverse to all of the nodes connected to the starting node without using any ferries. After traversing all connected nodes, we have to take a ferry to visit more unvisited nodes. Taking a ferry to a visited node would be useless since all nodes connected to this visited node would have been visited. Therefore, the ferry should be directed to some unvisited node. From there, we repeat the same process treating the node reached through the ferry ride as the starting node until there are no more unvisited nodes. There are $c$ connected components, we have $c-1$ ferry rides to traverse through all nodes. This solution would be the optimal solution due to the choice arguments made, so we require exactly $c-1$ ferry rides to reach every node.
+
+\section{Part b}
+
+First, we create $n$ sets each containing each island. Then, as each edge $(v,u)$ is streamed as an input, we check if the sets containing $v$ and $u$ are the same set. If they aren't, we take the union of the two sets that contain $v$ and $u$ essentially connecting both sets since the two sets are no longer disconnected. After we process all edges, we count how many sets we have remaining which would give us the number of disconnected components $c$ the graph has. Using part a, we will know that the number of ferry rides required is $c-1$. Since we store all the cities in the graph in a Union-find data structure, each city occupying $O(\log n)$ space, we spend a total of $O(n \log n)$ space.
+
+\section{Part c}
+
+Let's create a flow graph $G'$ s.t. it is the same graph as $G$ with every edge having capacity 1. Then, from our definition of every edge capacity of 1, we see that the min-cuts of the graph is at least $k$. Then, for any min-cut, the flow from the two components of the min-cut is at least $k$. Since, the flow graph is an integer flow graph, we know that there exists a flow configuration s.t. the flow through every edge is an integer amount. As the capacity of each edge is 1, we know that there are at least $k$ paths from the source node to the sink node. Therefore, we are done.
+
+\section{Part d}
+
+Determining whether a ferry ride is required or not is the same statement as checking whether every pair of nodes has more than $k+1$ pairwise edge disjoint paths. If there are less than $k+1$ pairwise edge disjoint paths for some nodes $u$ and $v$ we would be able to remove one edge from every pairwise edge disjoint path between $u$ and $v$ totalling in at most $k$ edges removed. If the graph does have more than $k+1$ pairwise edge disjoint paths, eliminating a path with only one edge would not be sufficient to disconnect the graph.\\
+
+With that in mind, we will now describe an algorithm that ensures that there are $k+1$ pairwise edge disjoint paths between any pair of nodes. We will create $k+1$ union-find data structures labelled 1 to $k+1$ and an empty set of edges $E'$. Then, as we process an edge $(u,v)$ from the stream of edges, we will check iteratively for each union find structure $i$ whether the nodes $u$ and $v$ are in the same set. If so, we continue to the next iteration. If not, we take the union of the two sets and add the edge to $E'$. If we find that $u$ and $v$ are in the same set for all $k+1$ union-find data structures, we will discard the edge without adding it to $E'$. At the end of the stream, we will run maxflow-mincut on the set of edges $E'$. If the mincut of this graph is less than $k+1$ we would output that at worst case, at least one ferry ride would be needed.\\
+
+The intuition behind the solution is that every in iteration of union find the algorithm increases the number of pairwise edge disjoint paths between connected components. If there are two pairwise edge disjoint paths between connected components, this implies that the union find structures have the connected component being one set up to the second iteration.\\
+
+There are $O(nk)$ edges stored in $E'$ and $O(nk)$ space allocated for the $k+1$ union find structures. Since maxflow-mincut uses $O(1)$ additional space, we have a total of $O(kn \log n)$ space with the $\log$ factor coming from the size of each node/edge.
+
+
+
+\end{document}
+

@@ -1,0 +1,84 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{2-4}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Vyacheslav Kim, Corutney Guo}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+We can think of a set up where there is a local peak right to $(0,0)$, while the summit is at some $(i,j)$. Then, we would be in a situation where the hikers would not move from the spot.
+
+\section{Part b}
+To solve this problem, we approach this by proposing a D \& C routine to find the highest point. First we measure all the heights around the borders as well as a vertical and horizontal line through the middle of the grid, splitting the grid into four squares of size $n^2/4$. We then choose the tallest point from these points and look at which direction we have an increase in height. If we are at a peak in this situation, we are done. If not, we move along the direction of increasing height until we are inside one of the partitions we have just made. Once we have chosen a partition, we will then, recursively do this procedure on the partition we chose until we reach a peak. The recursion equation is as follows,
+
+\begin{equation*}
+    T(n) = T(n/2) + O(n)
+\end{equation*}
+
+By Master's Theorem we have a total runtime of $O(n)$.
+
+\section{Part c}
+To solve this problem, first let's rank the $n^2$ points of the grid in descending order of height. Then for a point randomly chosen on the grid, we know that the probability of landing on the first $Cn$ points equals $Cn/n^2 = C/n$ for some constant $C$. If a person is dropped at this position, there will be $O(n)$ points on the whole grid which are at a higher height than he is currently at. This implies that he will reach some peak, if not the summit, in $O(n)$ steps by doing local peak search. With that solved, we simply need to prove that dropping $k = \Theta(n)$ people is enough to ensure that the probability of no people being dropped at the $Cn$ highest points in the grid is upper bounded by $0.1$.\\
+
+Let's set $Y_i$ to be equal to $0$ if they are not dropped at the highest $Cn$ points of the grid and $1$ if they are. Then, we see that our failure condition is $\sum Y_i < 1$. Applying the Chernoff bound we see that
+
+\begin{eqnarray*}
+    Pr(\sum Y_i < 1) \leq exp(-b^2 E / 2)\\
+\end{eqnarray*}
+
+Here, we can find $E$ as well as $b$.
+
+\begin{eqnarray*}
+    E &=& Ck/n\\
+    (1-b)E &=& 1\\
+    b &=&1 - 1/E\\
+    &=& 1 - n/Ck
+\end{eqnarray*}
+
+Applying these into the first equation we get
+
+\begin{eqnarray*}
+    Pr(\sum Y_i < 1) &\leq& exp(-(1 - \frac{2n}{Ck} + (\frac{n}{Ck})^2) \frac{Ck}{2n})\\
+    &=& exp(-\frac{Ck}{2n} + 1 - \frac{n}{2Ck})
+\end{eqnarray*}
+
+Given that $k=\Theta(n)$, we see that this equals
+
+\begin{eqnarray*}
+    Pr(\sum Y_i < 1) &\leq& exp(1 - C^*)
+\end{eqnarray*}
+
+for some constant $C^*$. Hence we showed that given $k = \Theta(n)$ people to drop off, we can upper bound the probability of not having a single person at the highest $Cn$ points by $0.1$. Therefore we are done.
+
+\section{Part d}
+\subsection{Part 1}
+We do mainly the same routine, the only difference being the fact that we divide our $3D$ grid into eight partitions. Then, our recursion tree becomes
+
+\begin{equation*}
+    T(n) = T(n/8) + O(n^2)
+\end{equation*}
+
+Thus by Master's Theorem, the total runtime is $O(n^2)$.
+
+\subsection{Part 2}
+In this situation, we now want to find the expected value for the same setup we had. That is given
+
+\begin{eqnarray*}
+    Pr(\sum Y_i < 1) &\leq& exp(-b^2 E / 2) \leq 0.1\\
+    b &=& 1 - 1/E\\
+    k &=& C n^{1.5}\\
+\end{eqnarray*}
+
+we need to find E.
+
+\begin{eqnarray*}
+    exp(-(1 - \frac{2}{E} + \frac{1}{E^2}) \frac{E}{2}) = exp(-\frac{E}{2} + 1 -\frac{1}{2E})
+\end{eqnarray*}
+
+For this equation to be bound by a constant, we require $E$ to be $O(1)$. Then, we know that we get $E = O(1)$ only when we have defined $Y_i = 1$ when a person is dropped at the highest $Cn^{1.5}$ points as the probability of getting to this point times $k$ is $Cn^{1.5}/n^3 k = C/n^{1.5} k = C^*$ for some constants $C$ and $C^*$. This implies that the runtime for the person at the highest point is $O(n^{1.5})$.
+
+\end{document}
+

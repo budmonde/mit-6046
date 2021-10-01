@@ -1,0 +1,55 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{1-4}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo, Brice Huang, Danny Tang}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+For a given neuron, charging it three times will result in it firing two charges and resetting its energy to $0$. We observe here a net loss of $1$ unit of energy. In the case we are given $n$ manual charges to spend, we now that we can only induce up to $n$ neurons firing charges and resetting. Therefore we can expect us to see up to $2n$ induced charges using $n$ manual charges. From here, it is clear that the amortized cost of a charge operation is $O(1)$.
+
+\section{Part b}
+We will start by charging two neurons at positions $0$ and $1$. Afterwards, we will charge them again and observe that now neurons at $-1$, $0$, $1$ and $2$ have their energy level at $1$. Now for each round, if we keep charging the two ends of the chain of neurons with energy level at $1$, we observe that the chain expands on both sides by $1$. In the process of doing so, each neuron of energy level of 1 fires once. So, by inputting $2n$ manual charges, we expect us to see $2\ +\ 4\ +\ 6\ +\ ...\ +\ 2n$. As this is an arithmetic progression, we see that we get $\theta(n^2)$ runtime.
+
+\section{Part c}
+Let's define a potential function for the problem as follows. For every time we charge a neuron we add the potential of the system by $i^2$ where $i$ is the index of the neuron and every time it fires, we change it back to $0$. Keep in mind that indexes range from $-\infty$ to $\infty$. Let's say we have one neuron with energy level at $1$. The potential of this system would be $i^2$. Now if we charge $i$, giving it $i^2$ more potential (totalling at $2i^2$), the neuron will fire in both directions and the new potential of the system would be $2i^2+2$. The difference in potential before and after the neuron fired increases by 2, which is the number of charges the neuron induced.\\
+
+For a given a configuration of consecutive neurons with energy level at $1$, we will show that if we charge any neuron in this chain, the stabilized new configuration would only be able to extend at most by 1 on both sides. Ie, if the initial chain was of length $n$, the new configuration would be at most of length $n+2$. To prove this, first we will show how two simpler configurations stabilize.\\
+
+In the following set up where we charge the middle element, it's pretty clear that the configuration expands by $1$ on both sides and leave the middle element with energy $0$.
+
+\begin{eqnarray*}
+    11111...&\check{1}&...11111\\
+    111111...&0&...111111
+\end{eqnarray*}
+
+In the set up where we charge the edge element, it's pretty clear that the configuration expands by $1$ on both sides as well, leaving an element at the other end of the chain as shown below with energy $0$.
+
+\begin{eqnarray*}
+    11111&...&1111\check{1}\\
+    101111&...&111111\\
+\end{eqnarray*}
+
+Now for the general case, let's consider we choose some random $i$th neuron to charge. Without loss of generality, let's assume the $i$th neuron is to the right of the middle point. Then, we can partition the long chain into two parts, one ranging from $i-(n-i)$ and $n$. This chain will have it's center at $i$. The remainder will be the other partition. Using the results from above we will observe the following. (The neuron that is about to be charged is shown with a 'check' on top. Keep in mind that although some effects are not necessarily happening at the time of the snapshot, the charge signals that are travelling both ways starting from the second line onwards does not affect each other, so it doesn't really matter the timing of the end of each charge chain.
+
+\begin{eqnarray*}
+       11111 ... 11111\ 111 ... &111\check{\underset{i}{1}}111& ... 111\\
+       11111 ... 1111\check{1}\ 111 ... &1110111& ... 1111\\
+      101111 ... 11111\ \check{1}11 ... &1110111& ... 1111\\
+      101111 ... 1111\check{1}\ 111 ... &1101111& ... 1111\\
+      110111 ... 11111\ \check{1}11 ... &1101111& ... 1111\\
+    ...\\
+    ...\\
+    ...\\
+111111 ... 0 ... 11111\ \check{0}11 ... &1111111& ... 1111\\
+111111 ... 0 ... 11111\ 111 ... &1111111& ... 1111\\
+\end{eqnarray*}
+
+The sequence will finally halt when one of the $0$s reach the point where the charge conflict is occurring. As such we see that even though a lot of charges are happening back and forth, the range of neurons with energy level $1$ does not increase by more than $2$. In case of configurations with $0$s in between it is clear that they are simply a collection of the 'long chain of 1s' and so they would not expand by more than 2 either.
+
+Given that any configuration does not expand by more than $1$ let's charge a neuron at $i=0$ for calculation convenience. If we charge the neuron at $i=0$ and we had $n$ charges at the time across the board, we will have the system increase it's potential by $O(n^2)$ which means the amortized runtime will be $O(n^2)$.
+\end{document}
+

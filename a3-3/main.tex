@@ -1,0 +1,18 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{3-3}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+We can model this problem as a max-flow of students moving between classes. We are given as an input the students who are at each room before 7PM. Let's model this by saying that we have a source node pointing to vertices corresponding to each room before 7PM with edges directed at the 'rooms before 7PM' and edge capacities equal to the number of students which are in the room before 7PM. Looking from the other side, we will also have a sink node which is pointed  by vertices corresponding to each room after 7PM with edges directed from the 'rooms after 7PM' and edge capacities equal to the number of students which are in the room after 7PM. Lastly our graph will have edges from vertices of 'rooms before 7PM' to 'neighboring rooms after 7PM'. Essentially, if there is a path from room $A$ to room $B$, there is an edge from vertex representing room $A$ before 7PM, to a vertex representing room $B$ after 7PM. Note that there are edges from a given room before 7PM to the same room after 7PM. The weights of the edges are all going to be the number of students that were in the room since that it the max amount of students can travel from a given room.\\
+
+With this graph set up, we can run the Max-Flow algorithm to find the max-flow from the source node to the sink node. If the max-flow is indeed the number of students that we initially had, we will know that the setup is indeed possible as it implies that our source node filled up all the rooms as required by the initial condition of the problem. If it doesn't it implies that the initial setup of the problem was not even fulfilled so the flow was not possible.\\
+
+Since the max-flow algorithm discussed in class runs in $O(|V||E|^2)$, we are done.
+
+\end{document}
+

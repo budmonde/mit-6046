@@ -1,0 +1,42 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{3-2}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{none}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+\subsection{Question 1}
+Using the equations in the question statement:
+\begin{eqnarray*}
+    g_K &=& \min_{0 \leq k \leq K} ||\nabla f(x^k)||\\
+    &\leq& \frac{1}{K+1} \sum^K_{k = 0} ||\nabla f(x^k)||.
+\end{eqnarray*}
+By AMQM:
+\begin{eqnarray*}
+    g_K &\leq& \sqrt{\frac{1}{K+1} \sum^K_{k = 0} ||\nabla f(x^k)||^2}.\\
+    &=& \sqrt{\frac{2L}{K+1}} \sqrt{\sum^K_{k=0} [f(x^k) - f(x^{k+1})]}\\
+    &\leq& \sqrt{\frac{2L}{K+1}} \sqrt{f(x^0) - f(x^*)}.
+\end{eqnarray*}
+This is true because $f(x^*) \leq f(x^{K+1})$. Hence we are done.
+\subsection{Question 2}
+If the $g_K$ goes below $\epsilon$, the algorithm terminates. Hence this inequality holds true. Finding $K$ from there gives
+\begin{eqnarray*}
+     \epsilon &\leq& \sqrt{\frac{2L}{K+1}} \sqrt{f(x^0) - f(x^*)}\\
+     K &\leq& \frac{1}{\epsilon^2} [2L (f(x^0) - f(x^*)) + 1]
+\end{eqnarray*}
+Hence we are done.
+\section{Part b}
+Let's consider the convex function $f(x) = x^2$. If we choose $x^0 = 1$ and $L = 1$ we get:
+\begin{eqnarray*}
+     f(x^1) &=& 1 - 1 \times 2 = -1\\
+     f(x^2) &=& -1 + 1 \times 2 = 1\\
+     ...\\
+     ...\\
+\end{eqnarray*}
+Hence the recursion oscillates indefinitely.
+\end{document}
+

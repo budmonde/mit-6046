@@ -1,0 +1,40 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{5-4}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+To solve this problem, we will first need to do some pre-computation to get access to some values we would be using later in the solution. For every row $k$, we choose a segment $(i,j)$. We would like to determine whether there's  a coral in this segment for all pairs $(i,j)$. To do so, we define a DP problem. First we represent each cell by 1 if there is a coral there and 0 if not: the sub-problem is
+
+\begin{equation*}
+    C_k(i,j) = C_k(i,j-1)\ ?\ 1\ :\ r_j    
+\end{equation*}
+
+Where $r_j$ is the value of the cell at index $j$. $C_k(i,j)$ outputs 1 if there is a coral in the range and 0 otherwise. Since there are $n^2$ sub-problems and since each sub-problem takes $O(1)$ time the pre-computation for each row is $O(n^2)$. Then, for all rows, this takes $O(n^3)$ run-time. To later access these values we will use $C(k,i,j)$.\\
+
+Now, for all pairs $(i,j)$ we will create an array $[C(0,i,j),\ C(1,i,j),\ ...\ C(k,i,j)]$. From this array, we would be able to find the longest interval where there are no corals at all in the segment. Say the interval is $(l,m)$. Then we see that the area this covers is $(m-l)(j-i)$. By iterating through all $(i,j)$, we would be able to find the segment with maximum length.\\
+
+We can compute the longest interval with no corals given the array described above in $O(n)$ time By simply going through the array and replacing longer segments to be the longest segments as we find them. Since we have access to all $C(k,i,j)$s we make the array in $O(n)$ time as well. Since there are $n^2$ pairs of $(i,j)$ the total run-time is $O(n^3)$.\\
+
+As we're accessing indices of input size $O(\log(n))$, we justify having an additional $polylog(n)$ factor in the total run-time.
+
+\section{Part b}
+
+We will show this problem is \emph{NP-hard} by reducing a vertex cover problem into this problem. Let's define a vertex cover problem for a graph $G(V,E)$. The reduction is as follows:\\
+
+We number each vertex from 1 to $n$ assuming there are $n$ vertices in the graph. For each edge $e = (i,j)$ we position a coral at index $(i,j)$ of the array representing the land. Then, the edges connected to a vertex represents all the corals which would be removed if the coral removal machine were to be used on vertex $i$.\\
+
+Let's say we find a vertex cover for the graph $G(V,E)$. This vertex cover would cover every edge in the graph. Clearly, we were able to remove all the corals using this vertex cover.\\
+
+In the other direction, we can use a similar argument to state that if we have a land with corals at locations $(i,j)$ and they are removed by coral removal machine uses at indices $k$, each edge in the corresponding graph $G$ would be covered by the $k$ vertices in the graph.\\
+
+The run-time of constructing the graph from the land is in polynomial time since we create $n$ nodes and up to $n^2$ edges each operation taking $O(1)$ time.
+
+\end{document}
+

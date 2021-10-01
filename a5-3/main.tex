@@ -1,0 +1,64 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{5-3}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Courtney Guo}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+Since we are moving only in one direction, we essentially have to choose $n$ days to move to the eastern city and stay in the current city for the rest of the $m-n$ days. Hence we see that the total number of possibilities is expressed by $\choose {m}{n}$.
+
+\section{Part b}
+
+We use DP to solve this problem. In this situation, each sub-problem is $N(i,j)$ representing the number of ways to reach the destination from $i$ cities away and using $j$ days. The base cases are $N(i,j) = 0$ if $i > j$ and $N(i,j) = 1$ if $i = j$. This is because if we're too far from the destination city given the number of days we have, we'd not be able to reach and if we're exactly at the distance where we need to spend every day travelling in the direction of the destination city to reach it we'd only have one way of reaching it. Then, we define the sub-problem as follows:
+
+\begin{equation*}
+    N(i,j) = N(i+1, j-1) + N(i, j-1) + N(i-1, j-1)
+\end{equation*}
+
+In the case of running out of bounds, we simply do not add those cases. Ie, $N(-1,j) = N(n,j) = 0$. Since there are $mn$ sub-problems and we spend $O(1)$ time computing each sub-problem given the answers for the smaller sub-problems. Therefore, the total run-time is $O(mn)$.
+
+\section{Part c}
+
+Similarly to previous section each sub-problem is $N(i,j)$ representing the number of ways to reach the destination from $i$ cities away and using $j$ days. The base cases are $N(i,j) = 0$ if $i > jk$ and $N(i,j) = 1$ if $i = jk$. The same logic applies as in the previous section with an argument about reachable and unreachable conditions. Then, we define the sub-problem as follows:
+
+\begin{equation*}
+    N(i,j) = \sum^k_{l=-k} N(i+l, j-1)
+\end{equation*}
+
+Again, if indices run out of bounds, we simply do not add those cases. Since there are $mn$ sub-problems and we spend $O(k)$ time computing each sub-problem given the answers for the smaller sub-problems, the total run-time is $O(nmk)$.
+
+\section{Part d}
+
+We will use a DP here with $N(i,j)$ representing the number of paths which bring us to the destination city from $i$ cities away and $j$ days to spare. Then, We will define the sub-problem as:
+
+\begin{equation*}
+    N(i,j) = \sum_{(i,l) \in E} N(l,j-1)
+\end{equation*}
+
+Here, $E$ is the set of bus routes from city $i$ to city $l$. We assume that staying in the same city is equivalent as having an edge $(i,i)$ which we add to the set of bus routes. To solve the overall problem we attempt a bottom up approach by defining the base case $N(0,0) = 0$. Then, for each recursion we find edges which are directed at city $0$ away. We will terminate after $m$ iterations since by then the iteration would have backtracked $m$ days. We then read the value of $N(m,n)$. If it hasn't been initialized yet, it implies the travel plan is in fact impossible.\\
+
+Each sub-problem takes $O(n)$ time and since there are $O(nm)$ sub-problems, the total run-time is $O(n^2m)$.
+
+\section{Part e}
+
+Let's define a matrix $M$ to be represent the number of paths from city $i$ to city $j$ in $k$ days. So the matrix will look something like $M(k)_{ij}$ equals the number of paths. Then we claim that we can find the number of paths from any city $i$ to any city $j$ in $k+1$ days as $M(k) M$. Where $M_{ij}$ is 1 if there is a path from $i$ to $j$ and 0 otherwise.\\
+
+Proof. Let's say we know that a person can travel from city $i$ to city $l$ in $k$ days using $M(k)_{il}$ paths. Then if we have a path from $l$ to $j$ in one day, We are able to get to $i$ through $l$ to $j$ in $k+1$ days using $M(k)_{il}$ paths. Summing that over all possible cities $l$, we get the matrix multiplication formula.
+
+\begin{eqnarray*}
+    M(k+1)_{ij} = \sum_{l=0}^{n-1} M(k+1)_{il} M_{lj}
+\end{eqnarray*}
+
+Then, by induction with the base case being $M^1_{ij} = M_{ij}$, we have shown that the number of paths from city $i$ to city $j$ in $k$ days is $M^k_{ij}$. For our problem, we need to look at $M^k_{1, n-1}$ for our final answer.\\
+
+For part a the matrix will look something like $M_{i,i+1} = 1$, $M_{i,i} = 1$ otherwise 0. For part b the matrix will add $M_{i, i-1}$ to its non-zero terms and part c will add $M_{i, i+l}$ for all $l \in [-k, k]$. As such we will use the same solution for all parts.\\
+
+For runtime, we are multiplying matrices of size $n \times n$ $m$ times. Using repeated squaring multiplication, we can do matrix multiplications $\log m$ times each costing $O(n^3)$ time since there are $n^2$ cells and each cell takes $O(n)$ time to solve. Hence the total run-time is $O(n^2 \log m)$.
+
+\end{document}
+

@@ -1,0 +1,53 @@
+\documentclass{6046}
+
+\author{Budmonde Duinkharjav}
+\problem{6-3}
+% \problem{A-B} means Problem Set A, Problem B.
+\collab{Danny Tang}
+% or give names, e.g., \collab{Alyssa P. Hacker and A. Student}
+
+\begin{document}
+
+\section{Part a}
+
+First we prove the hint:
+
+\begin{equation*}
+    \sum^k_{i=1} p_i \leq p^* < \sum^{k+1}_{i=1} p_i
+\end{equation*}
+
+The first part is trivial since we know that the optimal solution is the maximum value of $p$. To prove the other inequality, we note that the fractional knapsack problem's optimal solution is given by the greedy scheme s.t.
+
+\begin{eqnarray*}
+    p_f^* = \sum^k_{i=1} p_i + \alpha p_{i+1}
+\end{eqnarray*}
+
+where $\alpha$ is a fraction of the ${i+1}$th item. We also know that $p^* \leq p_f^*$. Then, 
+
+\begin{eqnarray*}
+    p^* \leq \sum^k_{i=1} p_i + \alpha p_{i+1} < \sum^{k+1}_{i=1} p_i
+\end{eqnarray*}
+
+Now, to prove that the above algorithm gives a 2-approximation for the problem we consider
+
+\begin{eqnarray*}
+    p^* &<& \sum^{k+1}_{i=1} p_i < 2 \max \{p_{k+1}, \sum^k_{i=1} p_i \} = 2 p_{apr}\\
+    p_{apr} &>& p^* / 2
+\end{eqnarray*}
+
+Since we mentioned above that $p^*$ is the largest value $p_{apr}$ can reach, the other side of the inequality also holds. Hence, we are done.
+
+\section{Part b}
+
+Let's consider the minimization problem as stated in the problem statement. We have a set of numbers $w_i$. We want to select a subset of these numbers s.t. the sum of the numbers in the subset is as close to some constant $C$ as possible while not becoming larger than $C$. Minimizing the difference between the sum of the subset's terms and $C$ is the same thing as maximizing the sum while keeping it less than $C$. Then, this is essentially same as solving the knapsack problem with items with weight and price given by $(w_i, w_i)$ and a knapsack of size $C$. We can make the same argument in the other direction, showing that the two problems are essentially the same.
+
+\section{Part c}
+
+Following the hint, we shall first show that \emph{SUBSET SUM} is reducible to \emph{POSITIVE SUBSET SUM(C)}. Given a set of integers for \emph{SUBSET SUM}, we shall first find the sum of the negative elements in the set $N$ (if there aren't any negative terms it's impossible to get a sum of zero so we might as well feed  \emph{POSITIVE SUBSET SUM(C)} an input that definitely outputs 'no'). Then we add the sum of all the positive elements of the set $P$. We then add $S = |N| + P$ to every element in the set ensuring that every element is positive. If there is a subset of elements in the original set that sums up to zero, the same subset in the new set would sum up to one of $S,\ 2S,\ ...,\ nS$ where $n$ is the size of the set. Then we would be able to input this to \emph{POSITIVE SUBSET SUM(C)} $n$ times each time trying with a one of $S,\ 2S,\ ...,\ nS$. If at least one of them outputs yes, we know that \emph{SUBSET SUM} will also output yes. We chose $S$ to be large enough so that if there was no valid subset for \emph{SUBSET SUM} which sums to zero, the maximum value a subset could have is not able to reach the objective of \emph{POSITIVE SUBSET SUM(C)} because otherwise we could end up outputting false positive yes outputs from \emph{POSITIVE SUBSET SUM(C)} when the subset used to generate the answer did not correspond to a subset that output a sum of zero in the original set.\\
+
+Now, we shall reduce \emph{POSITIVE SUBSET SUM(C)} to the minimization problem. The size of the knapsack will be $C$ and the set of weights of the items will be the set from the input to \emph{POSITIVE SUBSET SUM(C)}. Then, the output of 0 from the minimization problem would correspond to an output of yes for \emph{POSITIVE SUBSET SUM(C)}. Any non-zero output would imply that there was no possible subset which decreases the leftover space in the knapsack to 0.\\
+
+If a constant k-approximation polynomial algorithm was possible, we would have $1/k p_{opt} \leq p_{apr} \leq k p_{opt}$. However, the case of $p_{opt} = 0$ implies that the $p_{apr} = 0$ which would imply that the approximate minimization problem solves \emph{SUBSET SUM} in polynomial time. By contradiction, we are done.
+
+\end{document}
+
